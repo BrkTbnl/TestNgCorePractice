@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test name="Groups from different classes">
+        <groups>
+            <run>
+                <include name="Smoke"></include>
+            </run>
+        </groups>
+        <classes>
+            <class name="Part4._01_Groups"></class>
+            <class name="Part4._02_Groups2"></class>
+            <!--We added both of them because they both have tests with Smoke group name-->
+        </classes>
+    </test>
+</suite>
