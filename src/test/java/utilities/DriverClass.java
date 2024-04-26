@@ -4,8 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import java.io.IOException;
 
@@ -13,8 +19,24 @@ public class DriverClass {
     public WebDriver driver;
 
     @BeforeClass
-    public void createDriver(){
-        driver = new ChromeDriver();
+    @Parameters("browserName")
+    public void createDriver(@Optional("chrome") String browser) {
+
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                driver = new FirefoxDriver();
+                break;
+            case "safari":
+                driver = new SafariDriver();
+                break;
+            case "edge":
+                driver = new EdgeDriver();
+                break;
+
+        }
         driver.manage().window().maximize();
 
         driver.get("https://opencart.abstracta.us/index.php?route=account/login");
@@ -28,13 +50,13 @@ public class DriverClass {
         login();
     }
 
-    @AfterClass
-    public void quitDriver(){
+    @AfterClass(alwaysRun = true)
+    public void quitDriver() {
         driver.quit();
         closePreviousDrivers();
     }
 
-    public void login(){
+    public void login() {
         WebElement email = driver.findElement(By.id("input-email"));
         email.sendKeys("knightrider@gmail.com");
 
@@ -45,7 +67,7 @@ public class DriverClass {
         loginButton.click();
     }
 
-    public void closePreviousDrivers(){
+    public void closePreviousDrivers() {
         try {
             Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
         } catch (IOException e) {
